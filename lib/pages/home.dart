@@ -2,93 +2,113 @@ import 'package:fitnessapp/model/category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   List<CategoryModel> categories = CategoryModel.getCategories();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: _appBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _searchField(),
-          SizedBox(height: 40),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  "Category",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+
+          const SizedBox(height: 40),
+
+          // Title
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              "Category",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
-              SizedBox(height: 20),
-              SizedBox(
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final category = categories[index];
+            ),
+          ),
 
-                    return Container(
-                      width: 120,
-                      margin: EdgeInsets.only(left: 20),
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: category.boxColor,
-                        borderRadius: BorderRadius.circular(16),
+          const SizedBox(height: 20),
+
+          // ✅ Horizontal List
+          SizedBox(
+            height: 130,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                final category = categories[index];
+
+                return Container(
+                  width: 100,
+                  margin: EdgeInsets.only(
+                    left: index == 0 ? 20 : 10,
+                    right: index == categories.length - 1 ? 20 : 0,
+                  ),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: category.boxColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // icon
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Image.asset(category.iconPath),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // icon (SVG)
-                          SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: Image.asset(
-                              category.iconPath,
-                            ), 
-                          ),
 
-                          SizedBox(height: 10),
+                      const SizedBox(height: 10),
 
-                          // text
-                          Text(
-                            category.name,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
+                      // text
+                      Text(
+                        category.name,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
                       ),
-                    );
-                  },
-                ),
-              ),
-            ],
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  Container _searchField() {
+  // 🔍 Search Field
+  Widget _searchField() {
     return Container(
-      margin: EdgeInsets.only(top: 40, left: 40, right: 40),
+      margin: const EdgeInsets.only(top: 40, left: 20, right: 20),
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(color: Colors.white, blurRadius: 0.8, spreadRadius: 0.1),
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            blurRadius: 6,
+            spreadRadius: 2,
+          ),
         ],
       ),
       child: TextField(
         decoration: InputDecoration(
-          fillColor: Colors.white70,
+          fillColor: Colors.white,
           filled: true,
           hintText: "Search Item",
-          hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-          contentPadding: EdgeInsets.all(16),
+          hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+          contentPadding: const EdgeInsets.all(16),
           border: OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(28),
@@ -106,10 +126,13 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  AppBar appBar() {
+  // 📱 App Bar
+  AppBar _appBar() {
     return AppBar(
       backgroundColor: Colors.white,
-      title: Text(
+      elevation: 0,
+      centerTitle: true,
+      title: const Text(
         "BreakFast",
         style: TextStyle(
           color: Colors.black,
@@ -117,11 +140,10 @@ class HomePage extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      centerTitle: true,
       leading: GestureDetector(
         onTap: () {},
         child: Container(
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -134,10 +156,10 @@ class HomePage extends StatelessWidget {
         GestureDetector(
           onTap: () {},
           child: Container(
-            height: 30,
-            width: 30,
+            margin: const EdgeInsets.all(10),
             alignment: Alignment.center,
-            margin: EdgeInsets.all(10),
+            width: 30,
+            height: 30,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
